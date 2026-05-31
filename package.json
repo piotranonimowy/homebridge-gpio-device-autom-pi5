@@ -1,0 +1,36 @@
+{
+  "name": "homebridge-gpio-device-autom-pi5",
+  "version": "0.5.0",
+  "description": "Homebridge plugin exposing GPIO devices as HomeKit accessories, visible to Apple Home automations, ported to the Raspberry Pi 5 / RP1 character-device GPIO (libgpiod) — runs on Ubuntu 24.04 LTS. Fork of homebridge-gpio-device-autom.",
+  "main": "index.js",
+  "keywords": [
+    "homebridge-plugin",
+    "gpio",
+    "homekit",
+    "automation",
+    "raspberry-pi-5",
+    "rp1",
+    "libgpiod",
+    "gpiochip"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piotranonimowy/homebridge-gpio-device-autom-pi5.git"
+  },
+  "bugs": {
+    "url": "https://github.com/piotranonimowy/homebridge-gpio-device-autom-pi5/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "homebridge": ">=1.6.0"
+  },
+  "os": [
+    "linux"
+  ],
+  "homepage": "https://github.com/piotranonimowy/homebridge-gpio-device-autom-pi5#readme",
+  "author": "piotranonimowy",
+  "license": "ISC",
+  "dependencies": {
+    "node-libgpiod": "^0.6.0"
+  }
+}
