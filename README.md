@@ -10,9 +10,11 @@ interface (`/sys/class/gpio`) that the original `onoff` dependency relied on. Th
 (libgpiod 1.6.3). The HomeKit/automation behaviour and the device configuration format below
 are unchanged from the upstream fork.
 
-> Pin numbers in your config stay the same: they are BCM GPIO numbers. On Ubuntu 24.04 / Pi 5
-> the 40-pin header is `gpiochip0` and the BCM number equals the line offset, so no
-> renumbering is required.
+> Pin numbers in your config stay the same: they are BCM GPIO numbers, equal to the line
+> offset on the RP1 chip. The plugin **auto-detects** which gpiochip is the 40-pin header (the
+> one labelled `pinctrl-rp1`), so no chip configuration is normally needed. On Ubuntu 24.04 the
+> header is usually `gpiochip4`; on a patched Raspberry Pi OS kernel it may be `gpiochip0` —
+> either way detection handles it. Override with `GPIO_CHIP` only if auto-detection fails.
 
 # Apple Home automations
 
@@ -63,11 +65,15 @@ gpioset gpiochip0 17=1     # drive BCM17 high
 
 ### Selecting a different gpiochip
 
-The plugin defaults to `gpiochip0`. If your kernel exposes the 40-pin header under a different
-chip (some early Pi 5 firmware used `gpiochip4`), set the `GPIO_CHIP` environment variable for
-the Homebridge process, e.g. `Environment=GPIO_CHIP=4` in the systemd unit, or `export
-GPIO_CHIP=4` before launching. `gpiodetect` tells you which chip carries the `pinctrl-rp1`
-label.
+The plugin **auto-detects** the 40-pin header by finding the gpiochip whose label is
+`pinctrl-rp1`, so it works out of the box whether that chip is `gpiochip4` (typical on Ubuntu
+24.04) or `gpiochip0` (patched Raspberry Pi OS kernels). Check the layout with:
+```
+gpiodetect        # find the line labelled: gpiochipN [pinctrl-rp1] (54 lines)
+```
+Only if auto-detection fails (custom kernel, unusual label) set the `GPIO_CHIP` environment
+variable for the Homebridge process — e.g. `Environment=GPIO_CHIP=4` in the systemd unit, or
+`export GPIO_CHIP=4` before launching. An explicit `GPIO_CHIP` always overrides auto-detection.
 
 ### Notes on input handling
 
@@ -336,3 +342,4 @@ When operating, the latch is unlocked for `duration` seconds (or indefinitely if
 | `duration`            	 | Integer (sec)  	| 0			| optional, duration before restoring locked state (0 : disabled)																										|
 | `inverted`				 | Boolean		  	| false		| optional, reverse the behaviour of the GPIO **output** pin (lock: HIGH, unlock: LOW)																						|
 | `inputPin`               	 | Integer			| N/A		| optional, input pin number for lock sensor (LOW: unlocked, HIGH: locked)																								|
+

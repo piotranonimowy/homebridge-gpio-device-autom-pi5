@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1 — Auto-detect the RP1 gpiochip
+
+- The 40-pin header chip is now **auto-detected** by locating the gpiochip
+  labelled `pinctrl-rp1`. Works whether that is `gpiochip4` (Ubuntu 24.04) or
+  `gpiochip0` (patched Raspberry Pi OS), with no configuration. `GPIO_CHIP`
+  still overrides when set. Resolution is lazy + memoised.
+
+
 ## 0.5.0 — Raspberry Pi 5 port
 
 - **GPIO backend swapped from `onoff` (sysfs) to `node-libgpiod` (libgpiod v1
